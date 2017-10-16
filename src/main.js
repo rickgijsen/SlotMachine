@@ -6,15 +6,20 @@ import BootState from './states/Boot'
 import SplashState from './states/Splash'
 import GameState from './states/Game'
 
-import config from './config'
+const config = {
+  width: 1280,
+  height: 720,
+  parent: 'gameWrapper',
+  scaleMode: Phaser.ScaleManager.EXACT_FIT,
+  renderer: Phaser.CANVAS,
+  fullScreenScaleMode: Phaser.ScaleManager.NO_SCALE,
+  transparent: false,
+  antialias: false
+};
 
 class Game extends Phaser.Game {
-  constructor () {
-    const docElement = document.documentElement
-    const width = docElement.clientWidth > config.gameWidth ? config.gameWidth : docElement.clientWidth
-    const height = docElement.clientHeight > config.gameHeight ? config.gameHeight : docElement.clientHeight
-
-    super(width, height, Phaser.CANVAS, 'content', null)
+  constructor (config) {
+    super(config)
 
     this.state.add('Boot', BootState, false)
     this.state.add('Splash', SplashState, false)
@@ -24,4 +29,4 @@ class Game extends Phaser.Game {
   }
 }
 
-window.game = new Game()
+window.game = new Game(config)
