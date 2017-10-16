@@ -13,20 +13,26 @@ export default class extends Phaser.State {
     //
     // load your assets
     //
-    this.load.image('mushroom', 'assets/images/big-win.png');
     this.load.image('bg', 'assets/images/bg.jpg');
     this.load.image('darkOverlay', 'assets/images/dark-bg-overlay.png');
     this.load.image('slotmachine', 'assets/images/slotmachine.jpg');
     this.load.image('spinButton', 'assets/images/spin-btn.png');
     this.load.image('spinButtonPressed', 'assets/images/spin-btn-glow.png');
+    this.load.image('installButton', 'assets/images/install-btn.png');
     this.load.image('reelbg', 'assets/images/reel-bg.png');
     this.load.image('reelOverlay', 'assets/images/reel-overlay.png');
     this.load.image('startSpinning', 'assets/images/start-spinning.png');
     this.load.image('mousehand', 'assets/images/mousehand.png');
     this.load.image('bigWin', 'assets/images/big-win.png');
     this.load.image('hugeWin', 'assets/images/huge-win.png');
+    this.load.image('topBarsGlow', 'assets/images/top-bars-glow.png');
+    this.load.image('topDiamondsGlow', 'assets/images/top-diamond-glow.png');
+
+    this.load.spritesheet('coin', 'assets/images/coin-animation.png', 126, 126, 5);
 
     this.load.spritesheet('numbers', 'assets/images/red-numbers-sprite.png', 11, 22, 11);
+    this.load.image('linesNumber', 'assets/images/lines-number.png');
+    this.load.image('totalBetNumber', 'assets/images/total-bet-number.png');
 
     // slots
     this.load.image('seven', 'assets/images/slots-7.png');

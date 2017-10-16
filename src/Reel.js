@@ -1,6 +1,6 @@
 import Phaser from 'phaser'
-import Game from '../src/states/Game'
 
+// this class creates a reel filled with slots, the class has a spin function that will make the reel spin
 export default class extends Phaser.Group {
   constructor ({game, x, y, reelNumber}) {
     super(game);
@@ -15,9 +15,11 @@ export default class extends Phaser.Group {
     this.slotAmount = 8;
     this.canTween = true;
 
+    // background of the reel
     this.reelbg = new Phaser.Sprite(this.game, this.reelX, this.reelY, 'reelbg');
     this.add(this.reelbg);
 
+    // create a different order of slots for every reel, this makes them fall to the correct slot after spinning
     this.slotNames = [];
     switch (this.reelNumber) {
       case 1:
@@ -61,7 +63,7 @@ export default class extends Phaser.Group {
         this.slotNames[7] = 'crown'; // 2nd spin
         break;
     }
-
+    // create all slots in this reel
     this.slotMiddle = this.reelY + (this.reelbg.height / 2);
     this.slotOffset = 90;
     this.slots = [];
@@ -89,30 +91,35 @@ export default class extends Phaser.Group {
     this.add(this.reelOverlay);
   }
 
-  spin (amount, reelNumber) {
+  spin (amount, reelNumber, spinNumber) {
+    // take all the slots and tween them one position down, the lowest slot gets moved to the top
     for (let i = 0; i < this.slotAmount; i++) {
       if (this.slots[i].y >= this.slotMiddle + (this.slotOffset * 5)) {
+        // move slot from bottom to top
         this.slots[i].y = this.slotMiddle - (this.slotOffset * 3);
       }
+      // spin
       this.slotTweens = this.game.add.tween(this.slots[i]).to({y: this.slots[i].y + 90}, 50, Phaser.Easing.Linear.Out, true);
     }
     this.spinAmount++;
+    // check if the reel should spin more
     if (this.spinAmount < amount) {
-      this.slotTweens.onComplete.add(function () { this.spin(amount, reelNumber); }, this);
+      // keep spinning
+      this.slotTweens.onComplete.add(function () { this.spin(amount, reelNumber, spinNumber); }, this);
     } else {
       for (let i = 0; i < this.slotAmount; i++) {
+        // move slot from bottom to top
         if (this.slots[i].y >= this.slotMiddle + (this.slotOffset * 5)) {
           this.slots[i].y = this.slotMiddle - (this.slotOffset * 3);
         }
+        // end spin
         this.slotTweens = this.game.add.tween(this.slots[i]).to({y: this.slots[i].y + 90}, 500, Phaser.Easing.Bounce.Out, true);
-        if (reelNumber === 3) {
-          if (this.canTween) {
-            this.slotTweens.onComplete.add(() => {
-              Game.afterSpin(1);
-            }, this);
-          }
-        }
         this.spinAmount = 0;
+        if (this.reelNumber === 4) {
+          this.slotTweens.onComplete.add(() => {
+            this.game.onAfterSpin.dispatch(spinNumber);
+          })
+        }
       }
     }
   }
